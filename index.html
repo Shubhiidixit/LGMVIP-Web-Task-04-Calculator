@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Calculator</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      background-image: url('images/images.jpeg');
+    }
+
+    .calculator {
+      width: 400px;
+      margin: 120px auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    .calculator .result {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      height: 60px;
+      padding: 10px;
+      background-color: #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .calculator .result input {
+      flex: 1;
+      font-size: 24px;
+      border: none;
+      background-color: transparent;
+      text-align: right;
+    }
+
+    .calculator .button-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+    }
+
+    .calculator button {
+      padding: 25px;
+      border: none;
+      background-color: #ccc;
+      color: #333;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+    .calculator button:hover {
+      background-color: #999;
+    }
+
+    .calculator .button-container .button-operator {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .calculator .button-container .button-operator:hover {
+      background-color: #27374D;
+    }
+
+    .calculator .button-container .button-clear {
+      grid-column: span 2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="calculator">
+    <div class="result">
+      <input type="text" id="result" placeholder="0" disabled>
+    </div>
+    <div class="button-container">
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button class="button-operator">/</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button class="button-operator">*</button>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button class="button-operator">-</button>
+      <button>0</button>
+      <button>.</button>
+      <button class="button-operator">+</button>
+      <button class="button-clear">C</button>
+      <button class="button-operator">=</button>
+    </div>
+  </div>
+
+  <script>
+    const result = document.getElementById('result');
+    const buttons = document.querySelectorAll('.calculator button');
+    let calculation = '';
+    let decimalAdded = false;
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const buttonText = button.textContent;
+
+        if (buttonText === 'C') {
+          calculation = '';
+          result.value = '';
+          decimalAdded = false;
+        } else if (buttonText === '=') {
+          calculation = calculation.replace('x', '*');
+          calculation = calculation.replace('÷', '/');
+          try {
+            const evalResult = eval(calculation);
+            result.value = evalResult;
+            calculation = evalResult.toString();
+          } catch (error) {
+            result.value = 'Error';
+          }
+          decimalAdded = false;
+        } else if (
+          buttonText === '+' ||
+          buttonText === '-' ||
+          buttonText === 'x' ||
+          buttonText === '÷'
+        ) {
+          const lastChar = calculation[calculation.length - 1];
+          if (lastChar !== '+' && lastChar !== '-' && lastChar !== 'x' && lastChar !== '÷') {
+            calculation += buttonText;
+            result.value = calculation;
+            decimalAdded = false;
+          }
+        } else if (buttonText === '.') {
+          if (!decimalAdded) {
+            calculation += buttonText;
+            result.value = calculation;
+            decimalAdded = true;
+          }
+        } else {
+          calculation += buttonText;
+          result.value = calculation;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
